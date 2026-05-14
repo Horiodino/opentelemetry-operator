@@ -1031,7 +1031,7 @@ endif
 ifndef DIGEST
 	$(error DIGEST is not set. Usage: make cosign-sign IMAGE=<image> DIGEST=<digest>)
 endif
-	$(COSIGN) sign --yes --registry-referrers-mode=oci-1-1 "$(IMAGE)@$(DIGEST)"
+	COSIGN_EXPERIMENTAL=1 $(COSIGN) sign --yes --registry-referrers-mode=oci-1-1 "$(IMAGE)@$(DIGEST)"
 
 # Print the signature reference for a signed image.
 # Usage: make cosign-triangulate IMAGE=ghcr.io/... DIGEST=sha256:...
