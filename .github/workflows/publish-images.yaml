@@ -132,15 +132,3 @@ jobs:
         run: |
           make cosign-sign IMAGE="${GHCR_IMAGE}" DIGEST="${DIGEST}"
           make cosign-sign IMAGE="${DOCKERHUB_IMAGE}" DIGEST="${DIGEST}"
-
-      - name: Tag GHCR signature manifest
-        if: ${{ github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v') }}
-        env:
-          DIGEST: ${{ steps.build.outputs.digest }}
-        run: |
-          set -euo pipefail
-          GHCR_SIGNATURE_REF=$(make -s cosign-triangulate IMAGE="${GHCR_IMAGE}" DIGEST="${DIGEST}")
-          docker run --rm \
-            -v "${HOME}/.docker/config.json:/root/.docker/config.json:ro" \
-            ghcr.io/oras-project/oras:v1.3.0 \
-            tag "${GHCR_SIGNATURE_REF}" "${GITHUB_REF_NAME}.sig"
