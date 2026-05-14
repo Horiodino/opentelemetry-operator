@@ -993,6 +993,18 @@ ifndef DIGEST
 endif
 	$(COSIGN) sign --yes "$(IMAGE)@$(DIGEST)"
 
+# Print the signature reference for a signed image.
+# Usage: make cosign-triangulate IMAGE=ghcr.io/... DIGEST=sha256:...
+.PHONY: cosign-triangulate
+cosign-triangulate: cosign
+ifndef IMAGE
+	$(error IMAGE is not set. Usage: make cosign-triangulate IMAGE=<image> DIGEST=<digest>)
+endif
+ifndef DIGEST
+	$(error DIGEST is not set. Usage: make cosign-triangulate IMAGE=<image> DIGEST=<digest>)
+endif
+	@$(COSIGN) triangulate "$(IMAGE)@$(DIGEST)"
+
 ##@ Release
 
 .PHONY: create-release-issue
